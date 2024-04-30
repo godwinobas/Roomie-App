@@ -16,6 +16,10 @@ router.get('/healtz', (req, res) => {
   res.json({ data: '201' });
 });
 
+router.get('/documentation', (req, res) => {
+  res.redirect('https://documenter.getpostman.com/view/28928988/2sA3JDhkaK');
+});
+
 // consent page
 router.get('/goauth', (req, res) => {
   res.redirect('/auth/google');
