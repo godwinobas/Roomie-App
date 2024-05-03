@@ -18,7 +18,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/auth/google/callback',
+      callbackURL: 'https://roomie-app-325b.onrender.com/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
       // check if user already exists
