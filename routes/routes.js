@@ -43,8 +43,14 @@ router.get(
 );
 
 router.get('/auth/success', isLoggedIn, (req, res) => {
-  let name = req.user.username;
-  res.send(`Hi ${name}, You are successfully Logged-in!`);
+  let user = [
+    { username: req.user.username },
+    {
+      profilePhoto: req.user.picture,
+    },
+    { email: req.user.email },
+  ];
+  res.json({ data: user });
 });
 
 router.get('/auth/failure', (req, res) => {

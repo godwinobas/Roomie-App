@@ -18,7 +18,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'https://roomie-app-325b.onrender.com/auth/google/callback',
+      callbackURL: process.env.CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
       // check if user already exists
@@ -31,6 +31,7 @@ passport.use(
             googleId: profile.id,
             username: profile.displayName,
             email: profile.email,
+            avatar: profile.photo,
           })
             .save()
             .then((newUser) => {
