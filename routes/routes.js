@@ -45,10 +45,10 @@ router.get(
 router.get('/auth/success', isLoggedIn, (req, res) => {
   let user = {
     username: req.user.username,
-    avatar: req.user.picture,
+    avatar: req.user.avatar,
     email: req.user.email,
   };
-  console.log(req.user);
+  // console.log(req.user);
   res.json({ data: user });
 });
 
