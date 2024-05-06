@@ -48,6 +48,7 @@ router.get('/auth/success', isLoggedIn, (req, res) => {
     avatar: req.user.picture,
     email: req.user.email,
   };
+  console.log(req.user);
   res.json({ data: user });
 });
 
