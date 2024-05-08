@@ -32,14 +32,10 @@ router.get(
 
 router.get(
   '/auth/google/callback',
-  passport.authenticate('google'),
-  (req, res) => {
-    if (req.user) {
-      res.redirect('https://roomieapp.netlify.app/home');
-    } else {
-      res.redirect('auth/failure');
-    }
-  }
+  passport.authenticate('google', {
+    successRedirect: 'https://roomieapp.netlify.app/home',
+    failureRedirect: 'auth/failure',
+  })
 );
 
 // router.get('/auth/user', (req, res) => {
