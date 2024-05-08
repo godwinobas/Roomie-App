@@ -30,19 +30,27 @@ router.get(
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
-router.get(
-  '/auth/google/callback',
-  passport.authenticate('google'),
-  (req, res) => {
-    if (req.user) {
-      res.redirect('/auth/success');
-    } else {
-      res.redirect('auth/failure');
-    }
-  }
-);
+// router.get(
+//   '/auth/google/callback',
+//   passport.authenticate('google'),
+//   (req, res) => {
+//     if (req.user) {
+//       res.redirect('/auth/success');
+//     } else {
+//       res.redirect('auth/failure');
+//     }
+//   }
+// );
 
-router.get('/auth/success', isLoggedIn, (req, res) => {
+router.get('/auth/user', passport.authenticate('google'), (req, res) => {
+  if (req.user) {
+    res.redirect('auth/user/success');
+  } else {
+    res.redirect('auth/failure');
+  }
+});
+
+router.get('/auth/user/success', isLoggedIn, (req, res) => {
   let user = {
     username: req.user.username,
     avatar: req.user.avatar,
