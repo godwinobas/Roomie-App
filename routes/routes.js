@@ -42,13 +42,17 @@ router.get(
 //   }
 // );
 
-router.get('/auth/user', passport.authenticate('google'), (req, res) => {
-  if (req.user) {
-    res.redirect('auth/user/success');
-  } else {
-    res.redirect('auth/failure');
+router.get(
+  '/auth/user',
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
+  (req, res) => {
+    if (req.user) {
+      res.redirect('auth/user/success');
+    } else {
+      res.redirect('auth/failure');
+    }
   }
-});
+);
 
 router.get('/auth/user/success', isLoggedIn, (req, res) => {
   let user = {
