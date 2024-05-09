@@ -2,8 +2,13 @@ const router = require('express').Router();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
-const isLoggedIn = (req, res, next) => {
-  req.user ? next() : res.sendStatus(401);
+// checking if a user is logged in
+const authCheck = (req, res, next) => {
+  if (!req.user) {
+    res.redirect('https://roomieapp.netlify.app');
+  } else {
+    next();
+  }
 };
 
 // homepage
@@ -46,7 +51,7 @@ router.get(
 //   }
 // });
 
-router.get('/auth/user', isLoggedIn, (req, res) => {
+router.get('/auth/user', authCheck, (req, res) => {
   let user = {
     username: req.user.username,
     avatar: req.user.avatar,
