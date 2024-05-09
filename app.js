@@ -5,9 +5,9 @@ const app = express();
 const passport = require('passport');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const cors = require('cors');
 // const path = require('path');
 const auth = require('./auth');
-// const cookieSession = require('cookie-session');
 
 // connect to mongodb
 function databaseConnection() {
@@ -16,13 +16,6 @@ function databaseConnection() {
   console.log('Connected to Server Successfully');
 }
 databaseConnection();
-
-// app.use(
-//   cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: process.env.SECRET_KEY,
-//   })
-// );
 
 app.use(
   session({
@@ -36,13 +29,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://roomieapp.netlify.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+let corsOptions = {
+  origin: ['https://roomieapp.netlify.app'],
+  allowedHeaders: '*',
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 app.use(routes);
 // app.use(express.static(path.join(__dirname, 'client')));
