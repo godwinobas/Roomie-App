@@ -11,6 +11,24 @@ const authCheck = (req, res, next) => {
   }
 };
 
+// cookie setter
+function setUserIDResponseCookie(req, res, next) {
+  if (req.user?.id !== req.cookies['myapp-userid']) {
+    if (req.user) {
+      const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+      const expirationDate = new Date(Date.now() + oneDayInMilliseconds);
+
+      res.cookie('myapp-userid', req.user.id, {
+        expires: expirationDate,
+        httpOnly: false,
+      });
+    } else {
+      res.clearCookie('myapp-userid');
+    }
+  }
+  next();
+}
+
 // homepage
 router.get('/', (req, res) => {
   res.json({ data: 'uh, welcome i guess...' });
@@ -37,10 +55,17 @@ router.get(
 
 router.get(
   '/auth/google/callback',
-  passport.authenticate('google', {
-    successRedirect: 'https://roomieapp.netlify.app/home',
-    failureRedirect: 'auth/failure',
-  })
+  passport.authenticate('google'),
+  setUserIDResponseCookie,
+  (req, res, next) => {
+    // if success
+    if (req.user) {
+      res.redirect('https://roomieapp.netlify.app/home');
+    } else {
+      res.redirect('/auth/failure');
+    }
+    next();
+  }
 );
 
 // router.get('/auth/user', (req, res) => {
