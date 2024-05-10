@@ -13,21 +13,19 @@ const authCheck = (req, res, next) => {
 
 // cookie setter
 function setUserIDResponseCookie(req, res, next) {
-  if (req.user?.id !== req.cookies['myapp-userid']) {
-    if (req.user) {
-      const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-      const expirationDate = new Date(Date.now() + oneDayInMilliseconds);
+  if (req.cookies?.['myapp-userid'] !== undefined && req.user) {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const expirationDate = new Date(Date.now() + oneDayInMilliseconds);
 
-      res.cookie('myapp-userid', req.user.id, {
-        expires: expirationDate,
-        httpOnly: false,
-      });
-    } else {
-      res.clearCookie('myapp-userid');
-    }
+    res.cookie('myapp-userid', req.user.id, {
+      expires: expirationDate,
+      httpOnly: false,
+    });
+  } else {
+    res.clearCookie('myapp-userid');
   }
-  next();
 }
+next();
 
 // homepage
 router.get('/', (req, res) => {
