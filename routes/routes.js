@@ -54,14 +54,13 @@ router.get(
   '/auth/google/callback',
   passport.authenticate('google'),
   setUserIDResponseCookie,
-  (req, res, next) => {
+  (req, res) => {
     // if success
     if (req.user) {
       res.redirect('https://roomieapp.netlify.app/home');
     } else {
       res.redirect('/auth/failure');
     }
-    next();
   }
 );
 
