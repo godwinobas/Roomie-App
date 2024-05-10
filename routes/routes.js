@@ -12,7 +12,7 @@ const authCheck = (req, res, next) => {
 };
 
 // cookie setter
-function setUserIDResponseCookie(req, res, next) {
+function setUserIDResponseCookie(req, res) {
   if (req.cookies?.['myapp-userid'] !== undefined && req.user) {
     const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
     const expirationDate = new Date(Date.now() + oneDayInMilliseconds);
@@ -25,7 +25,6 @@ function setUserIDResponseCookie(req, res, next) {
     res.clearCookie('myapp-userid');
   }
 }
-next();
 
 // homepage
 router.get('/', (req, res) => {
