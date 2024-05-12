@@ -4,27 +4,29 @@ const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 // checking if a user is logged in
 const authCheck = (req, res, next) => {
-  if (!req.user) {
-    res.redirect('https://roomieapp.netlify.app');
+  if (!req.session.myappUserId) {
+    res.send('auth check failed');
   } else {
     next();
   }
 };
 
 // cookie setter
-function setUserIDResponseCookie(req, res, next) {
-  if (req.cookies?.['myapp-userid'] !== undefined && req.user) {
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const expirationDate = new Date(Date.now() + oneDayInMilliseconds);
-
-    res.cookie('myapp-userid', req.user.id, {
-      expires: expirationDate,
-      httpOnly: false,
-    });
-  } else {
-    res.clearCookie('myapp-userid');
+function setUserIDResponseSession(req, res, next) {
+  try {
+    if (req.user) {
+      // Set user ID in the session
+      req.session.myappUserId = req.user.id;
+    } else {
+      // Clear user ID from the session
+      delete req.session.myappUserId;
+    }
+    next();
+  } catch (e) {
+    console.log('setUserIDResponseSession not working', e);
+    // Handle any errors (optional)
+    next(e);
   }
-  next();
 }
 
 // homepage
@@ -41,6 +43,10 @@ router.get('/documentation', (req, res) => {
   res.redirect('https://documenter.getpostman.com/view/28928988/2sA3JDhkaK');
 });
 
+router.get('/mockfrontend', (req, res) => {
+  res.send('this is our front for the main time');
+});
+
 // consent page
 router.get('/goauth', (req, res) => {
   res.redirect('/auth/google');
@@ -54,7 +60,7 @@ router.get(
 router.get(
   '/auth/google/callback',
   passport.authenticate('google'),
-  setUserIDResponseCookie,
+  setUserIDResponseSession,
   (req, res) => {
     // if success
     if (req.user) {
@@ -84,7 +90,7 @@ router.get('/auth/user', authCheck, (req, res) => {
 });
 
 router.get('/auth/failure', (req, res) => {
-  res.send('Something Went Wrong');
+  res.send('Google Oauth failed');
 });
 
 // auth logout

@@ -19,9 +19,13 @@ databaseConnection();
 
 app.use(
   session({
-    secret: process.env.SECRET_KEY,
-    resave: true,
+    secret: process.env.SECRET_KEY, // Change this to a secure secret
+    resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+      httpOnly: false,
+    },
   })
 );
 
@@ -30,7 +34,7 @@ app.use(passport.session());
 app.use(express.json());
 
 let corsOptions = {
-  origin: ['https://roomieapp.netlify.app'],
+  origin: ['*', 'http://127.0.0.1:5500'],
   allowedHeaders: '*',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
