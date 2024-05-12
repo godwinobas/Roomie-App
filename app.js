@@ -34,7 +34,7 @@ app.use(passport.session());
 app.use(express.json());
 
 let corsOptions = {
-  origin: ['*', 'http://127.0.0.1:5500'],
+  origin: '*',
   allowedHeaders: '*',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
