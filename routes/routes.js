@@ -104,7 +104,7 @@ router.get('/auth/protected', setUserIDResponseSession, (req, res) => {
         httpOnly: false,
         secure: false, // Set to true in production
       })
-      .redirect('https://roomie-app-1.onrender.com/mockfrontend');
+      .redirect('https://roomie-app-1.onrender.com/mockfrontend?auth=' + token);
   } catch (err) {
     console.log(err);
   }
