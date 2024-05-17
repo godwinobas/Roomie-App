@@ -41,7 +41,7 @@ app.use(passport.session());
 app.use(express.json());
 
 let corsOptions = {
-  origin: 'https://roomieapp.netlify.app/home',
+  origin: '*',
   allowedHeaders: '*',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
