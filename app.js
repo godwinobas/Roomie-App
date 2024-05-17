@@ -4,10 +4,13 @@ const express = require('express');
 const app = express();
 const passport = require('passport');
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 const mongoose = require('mongoose');
 const cors = require('cors');
-// const path = require('path');
 const auth = require('./auth');
+const cookieParser = require('cookie-parser'); // Import cookie-parser
+const jwt = require('jsonwebtoken');
+// const path = require('path');
 
 // connect to mongodb
 function databaseConnection() {
@@ -17,15 +20,19 @@ function databaseConnection() {
 }
 databaseConnection();
 
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.SECRET_KEY, // Change this to a secure secret
+    secret: process.env.SECRET_KEY,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
       httpOnly: false,
     },
+    // store: new SQLiteStore({ db: 'sessions.db', dir: './db.js' }),
   })
 );
 
@@ -34,7 +41,7 @@ app.use(passport.session());
 app.use(express.json());
 
 let corsOptions = {
-  origin: '*',
+  origin: 'https://roomieapp.netlify.app/home',
   allowedHeaders: '*',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

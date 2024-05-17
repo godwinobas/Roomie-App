@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 // checking if a user is logged in
@@ -59,16 +60,11 @@ router.get(
 
 router.get(
   '/auth/google/callback',
-  passport.authenticate('google'),
-  setUserIDResponseSession,
-  (req, res) => {
-    // if success
-    if (req.user) {
-      res.redirect('https://roomieapp.netlify.app/home');
-    } else {
-      res.redirect('/auth/failure');
-    }
-  }
+  passport.authenticate('google', {
+    keepSessionInfo: true,
+    successRedirect: '/auth/protected',
+    failureRedirect: '/auth/failure',
+  })
 );
 
 // router.get('/auth/user', (req, res) => {
@@ -91,6 +87,27 @@ router.get('/auth/user', authCheck, (req, res) => {
 
 router.get('/auth/failure', (req, res) => {
   res.send('Google Oauth failed');
+});
+
+router.get('/auth/protected', setUserIDResponseSession, (req, res) => {
+  try {
+    const userId = req.user._id.toString();
+    const secretKey = 'very secret key';
+    const token = jwt.sign({ userId }, secretKey, { expiresIn: '1h' });
+    console.log('this is the token ' + token);
+    console.log(req.session.myappUserId);
+
+    // Set the JWT as an HTTP-only cookie
+    res
+      .cookie('myCookie', token, {
+        maxAge: 3600000, // 1 hour (adjust as needed)
+        httpOnly: false,
+        secure: false, // Set to true in production
+      })
+      .redirect('/mockfrontend');
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // auth logout
