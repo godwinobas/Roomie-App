@@ -41,7 +41,7 @@ app.use(passport.session());
 app.use(express.json());
 
 let corsOptions = {
-  origin: 'http://localhost:5500',
+  origin: 'http://127.0.0.1:5500',
   allowedHeaders: 'Content-Type, Authorization',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
