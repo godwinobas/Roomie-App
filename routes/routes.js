@@ -5,6 +5,8 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
+// Middlewares
+
 // checking if a user is logged in
 const requireAuth = (req, res, next) => {
   const token = req.cookies.myCookie;
