@@ -6,6 +6,11 @@ const userSchema = new Schema({
   username: String,
   email: String,
   avatar: String,
+  password: {
+    type: String,
+    required: [true, 'Please enter a password'],
+    minLength: [6, 'Minimum password length is 6 characters'],
+  },
 });
 
 const User = mongoose.model('user', userSchema);
