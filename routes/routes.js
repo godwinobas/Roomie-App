@@ -1,9 +1,10 @@
-const User = require('../models/userModel.js');
-const Nuser = require('../models/Nuser.js');
-const router = require('express').Router();
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
+import User from '../models/userModel.js';
+import Nuser from '../models/Nuser.js';
+import { Router } from 'express';
+const router = Router();
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 
 // Middlewares
 
@@ -216,4 +217,4 @@ router.get('/mockfrontend', (req, res) => {
 //   res.send('logging out');
 // });
 
-module.exports = router;
+export default router;

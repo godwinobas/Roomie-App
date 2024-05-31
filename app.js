@@ -1,15 +1,18 @@
-require('dotenv').config();
-const routes = require('./routes/routes');
-const express = require('express');
+import dotenv from 'dotenv';
+dotenv.config();
+import routes from './routes/routes.js';
+import express from 'express';
 const app = express();
-const passport = require('passport');
-const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
-const mongoose = require('mongoose');
-const cors = require('cors');
-const auth = require('./auth');
-const cookieParser = require('cookie-parser'); // Import cookie-parser
-const jwt = require('jsonwebtoken');
+import passport from 'passport';
+import session from 'express-session';
+import SQLiteStore from 'connect-sqlite3';
+const SQLiteStoreSession = SQLiteStore(session);
+import mongoose from 'mongoose';
+import cors from 'cors';
+import auth from './auth.js';
+import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
+
 // const path = require('path');
 
 // connect to mongodb

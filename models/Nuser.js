@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-const { isEmail, isMobilePhone } = require('validator');
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import validator from 'validator';
+const { isEmail, isMobilePhone } = validator;
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -50,4 +51,4 @@ userSchema.statics.login = async function (email, password) {
 
 const Nuser = mongoose.model('nuser', userSchema);
 
-module.exports = Nuser;
+export default Nuser;
