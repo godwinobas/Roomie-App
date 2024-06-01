@@ -1,10 +1,9 @@
 import User from '../models/userModel.js';
-import Nuser from '../models/Nuser.js';
 import { Router } from 'express';
 const router = Router();
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
+// import Nuser from '../models/Nuser.js';
 
 // Middlewares
 
@@ -48,7 +47,7 @@ const checkUser = async (req, res, next) => {
 
           try {
             const userFromUserModel = await User.findById(decodedToken.id);
-            const userFromNuserModel = await Nuser.findById(
+            const userFromNuserModel = await User.findById(
               decodedToken.cookieId
             );
 
@@ -109,13 +108,13 @@ router.get('/documentation', (req, res) => {
 
 // auth routes (for now)
 router.post('/signup', async (req, res) => {
-  const { fullName, phoneNumber, email, password } = req.body;
+  const { username, email, avatar, password } = req.body;
 
   try {
-    const user = await Nuser.create({
-      fullName,
-      phoneNumber,
+    const user = await User.create({
+      username,
       email,
+      avatar,
       password,
     });
 
@@ -138,13 +137,13 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await Nuser.login(email, password);
+    const user = await User.login(email, password);
     const token = setCookie(user._id);
     res.cookie('myCookie', token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(200).json({ user: user._id + 'logged in successfully' });
+    res.status(200).json({ user: user._id + ' logged in successfully' });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: 'error loggin-in' });
@@ -174,10 +173,8 @@ router.get('/auth/user', requireAuth, checkUser, (req, res) => {
   let user;
   user = {
     username: req.user.username,
-    avatar: req.user.avatar,
     email: req.user.email,
-    username: req.user.fullName,
-    phone: req.user.phoneNumber,
+    avatar: req.user.avatar,
   };
   res.json({ data: user });
 });
@@ -188,9 +185,9 @@ router.get('/auth/failure', (req, res) => {
 
 router.get('/auth/protected', (req, res) => {
   try {
-    const userId = req.user._id.toString();
+    const cookieId = req.user._id.toString();
     const secretKey = process.env.COOKIE_SECRET_KEY;
-    const token = jwt.sign({ userId }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ cookieId }, secretKey, { expiresIn: '1h' });
     console.log('this is the token ' + token);
     console.log('this is the session cookie ' + req.session.myappUserId);
 

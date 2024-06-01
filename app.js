@@ -5,15 +5,15 @@ import express from 'express';
 const app = express();
 import passport from 'passport';
 import session from 'express-session';
-import SQLiteStore from 'connect-sqlite3';
-const SQLiteStoreSession = SQLiteStore(session);
 import mongoose from 'mongoose';
 import cors from 'cors';
 import auth from './auth.js';
 import cookieParser from 'cookie-parser';
-import jwt from 'jsonwebtoken';
 
+// const SQLiteStoreSession = SQLiteStore(session);
+// import SQLiteStore from 'connect-sqlite3';
 // const path = require('path');
+import jwt from 'jsonwebtoken';
 
 // connect to mongodb
 function databaseConnection() {
