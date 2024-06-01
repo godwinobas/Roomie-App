@@ -40,17 +40,10 @@ export const checkUser = async (req, res, next) => {
           let user;
 
           try {
-            const userFromUserModel = await User.findById(decodedToken.id);
-            const userFromNuserModel = await User.findById(
+            const userFromUserModel = await User.findById(
               decodedToken.cookieId
             );
-
-            if (userFromUserModel === null) {
-              user = userFromNuserModel;
-            } else {
-              user = userFromUserModel;
-            }
-
+            user = userFromUserModel;
             if (!user) {
               console.log('User not found');
             } else {
