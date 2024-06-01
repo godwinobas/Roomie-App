@@ -7,6 +7,7 @@ import passport from 'passport';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import router from './routes/authRoutes.js';
 import auth from './auth.js';
 import cookieParser from 'cookie-parser';
 
@@ -54,6 +55,7 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(routes);
+app.use(router);
 // app.use(express.static(path.join(__dirname, 'client')));
 
 app.listen(3000, () => {

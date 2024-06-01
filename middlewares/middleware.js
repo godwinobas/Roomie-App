@@ -1,6 +1,24 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 
+// Middlewares
+
+// // cookie setter
+export const setCookie = (cookieSettingData) => {
+  try {
+    const cookieId = cookieSettingData.toString();
+    const secretKey = process.env.COOKIE_SECRET_KEY;
+    const token = jwt.sign({ cookieId }, secretKey, { expiresIn: '1d' });
+
+    // Set the JWT as an HTTP-only cookie
+    return token;
+  } catch (err) {
+    console.error(err);
+    // Handle any errors (optional)
+    return null;
+  }
+};
+
 // checking if a user is logged in
 export const requireAuth = (req, res, next) => {
   const token = req.cookies.myCookie;
