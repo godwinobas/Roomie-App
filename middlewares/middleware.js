@@ -21,7 +21,8 @@ export const setCookie = (cookieSettingData) => {
 
 // checking if a user is logged in
 export const requireAuth = (req, res, next) => {
-  const token = req.cookies.myCookie;
+  const token =
+    req.cookies.myCookie || req.headers.authorization?.split(' ')[1];
 
   // check if json web token exists & can be verified
   if (token) {
@@ -41,7 +42,8 @@ export const requireAuth = (req, res, next) => {
 
 //  check current user
 export const checkUser = async (req, res, next) => {
-  const token = req.cookies.myCookie;
+  const token =
+    req.cookies.myCookie || req.headers.authorization?.split(' ')[1];
 
   if (token) {
     jwt.verify(
@@ -79,4 +81,16 @@ export const checkUser = async (req, res, next) => {
   } else {
     console.log('no cookie to verify in check user func');
   }
+};
+
+export const handleErr = async (err, req, res, next) => {
+  var status = 500;
+  var message = 'internal server error';
+
+  // if(err.Code === '34567'){
+  //   status = 400
+  //   m
+  // }
+
+  res.status(status).json({ message, success: false, err });
 };
