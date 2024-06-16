@@ -14,7 +14,7 @@ export const setCookie = (cookieSettingData) => {
     return token;
   } catch (err) {
     console.error(err);
-    // Handle any errors (optional)
+    next(err);
     return null;
   }
 };
@@ -29,14 +29,16 @@ export const requireAuth = (req, res, next) => {
     jwt.verify(token, process.env.COOKIE_SECRET_KEY, (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.status(401).json({ error: 'Failed to verify access Token' });
+        next(err);
       } else {
         console.log(decodedToken);
         next();
       }
     });
   } else {
-    res.status(401).json({ error: `You're not authorized to use this route` });
+    const noTokenError = new Error('No token provided');
+    noTokenError.statusCode = 401;
+    next(noTokenError);
   }
 };
 
@@ -54,7 +56,7 @@ export const checkUser = async (req, res, next) => {
           console.log(
             'failed to verify cookie in check user function ' + err.message
           );
-          next();
+          next(err);
         } else {
           console.log(decodedToken);
           let user;
@@ -72,6 +74,7 @@ export const checkUser = async (req, res, next) => {
             }
           } catch (err) {
             console.error('Error fetching user:', err.message);
+            next(err);
           }
 
           next();
@@ -80,17 +83,6 @@ export const checkUser = async (req, res, next) => {
     );
   } else {
     console.log('no cookie to verify in check user func');
+    next(err);
   }
-};
-
-export const handleErr = async (err, req, res, next) => {
-  var status = 500;
-  var message = 'internal server error';
-
-  // if(err.Code === '34567'){
-  //   status = 400
-  //   m
-  // }
-
-  res.status(status).json({ message, success: false, err });
 };

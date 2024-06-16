@@ -4,7 +4,7 @@ import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
 // auth routes (for now)
-export const signupPost = async (req, res) => {
+export const signupPost = async (req, res, next) => {
   const { username, email, avatar, password } = req.body;
 
   try {
@@ -25,12 +25,13 @@ export const signupPost = async (req, res) => {
       .json({ message: 'User created successfully', user: user._id });
   } catch (err) {
     console.error(err);
-    res.status(400).json({ error: 'Error creating user' });
+    next(err);
+    // res.status(400).json({ error: 'Error creating user' });
   }
 };
 
 // Login route
-export const loginPost = async (req, res) => {
+export const loginPost = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -43,7 +44,7 @@ export const loginPost = async (req, res) => {
     res.status(200).json({ user: user._id + ' logged in successfully' });
   } catch (err) {
     console.error(err);
-    res.status(400).json({ error: 'error loggin-in' });
+    next(err);
   }
 };
 
@@ -66,7 +67,7 @@ export const aFailure = (req, res) => {
   res.send('Google Oauth failed');
 };
 
-export const aSuccess = (req, res) => {
+export const aSuccess = (req, res, next) => {
   try {
     const cookieId = req.user._id.toString();
     const secretKey = process.env.COOKIE_SECRET_KEY;
@@ -83,6 +84,7 @@ export const aSuccess = (req, res) => {
       })
       .redirect(process.env.FRONTENDAPP_URL + '?auth=' + token);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    next(err);
   }
 };

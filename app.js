@@ -1,20 +1,19 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 import routes from './routes/routes.js';
 import express from 'express';
-const app = express();
 import passport from 'passport';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import router from './routes/authRoutes.js';
-import auth from './auth.js';
+import appRouter from './routes/appRoutes.js';
 import cookieParser from 'cookie-parser';
+
+const app = express();
 
 // const SQLiteStoreSession = SQLiteStore(session);
 // import SQLiteStore from 'connect-sqlite3';
 // const path = require('path');
-import jwt from 'jsonwebtoken';
 
 // connect to mongodb
 function databaseConnection() {
@@ -56,7 +55,13 @@ app.use(cors(corsOptions));
 
 app.use(routes);
 app.use(router);
-// app.use(express.static(path.join(__dirname, 'client')));
+app.use(appRouter);
+
+app.use(function errorHandler(err, req, res, next) {
+  res.status(500);
+  res.type('text/plain');
+  res.send(err.message);
+});
 
 app.listen(3000, () => {
   console.log('app now listening for requests on port 3000');

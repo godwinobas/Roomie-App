@@ -1,7 +1,5 @@
 import { Router } from 'express';
 const router = Router();
-import jwt from 'jsonwebtoken';
-import { requireAuth, checkUser } from '../middlewares/middleware.js';
 // import Nuser from '../models/Nuser.js';
 
 // homepage
@@ -16,16 +14,6 @@ router.get('/healtz', (req, res) => {
 
 router.get('/documentation', (req, res) => {
   res.redirect('https://documenter.getpostman.com/view/28928988/2sA3JDhkaK');
-});
-
-router.get('/auth/user', requireAuth, checkUser, (req, res) => {
-  let user;
-  user = {
-    username: req.user.username,
-    email: req.user.email,
-    avatar: req.user.avatar,
-  };
-  res.json({ data: user });
 });
 
 router.get('/mockfrontend', (req, res) => {
