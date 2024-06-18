@@ -20,9 +20,11 @@ export const signupPost = async (req, res, next) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res
-      .status(201)
-      .json({ message: 'User created successfully', user: user._id });
+    res.status(201).json({
+      message: 'User created successfully',
+      user: user._id,
+      cookie: token,
+    });
   } catch (err) {
     console.error(err);
     next(err);
@@ -41,7 +43,9 @@ export const loginPost = async (req, res, next) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.status(200).json({ user: user._id + ' logged in successfully' });
+    res
+      .status(200)
+      .json({ user: user._id + ' logged in successfully', cookie: token });
   } catch (err) {
     console.error(err);
     next(err);

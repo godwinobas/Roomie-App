@@ -58,6 +58,9 @@ app.use(router);
 app.use(appRouter);
 
 app.use(function errorHandler(err, req, res, next) {
+  if (err.message.includes('Unexpected')) {
+    err.message = `Something went wrong with the format of your Login request`;
+  }
   res.status(500);
   res.type('text/plain');
   res.send(err.message);
