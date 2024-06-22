@@ -1,6 +1,6 @@
 import { setCookie } from '../middlewares/middleware.js';
 import User from '../models/userModel.js';
-import passport from 'passport';
+import passport from '../auth.js';
 import jwt from 'jsonwebtoken';
 
 // auth routes (for now)
