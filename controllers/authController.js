@@ -88,12 +88,7 @@ export const aSuccess = (req, res, next) => {
         httpOnly: false,
         secure: false, // Set to true in production
       })
-      .json({
-        message: 'User created successfully',
-        user: req.user,
-        cookie: token,
-      });
-    // .redirect(process.env.FRONTENDAPP_URL + '?auth=' + token);
+      .redirect(process.env.FRONTENDAPP_URL + '?auth=' + req.user);
   } catch (err) {
     console.error(err);
     next(err);
