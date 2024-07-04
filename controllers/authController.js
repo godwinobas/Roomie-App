@@ -82,13 +82,16 @@ export const aSuccess = (req, res, next) => {
     console.log('this is the session cookie ' + req.session.myappUserId);
 
     // Set the JWT as an HTTP-only cookie
-    res
-      .cookie('myCookie', token, {
-        maxAge: 3600000, // 1 hour (adjust as needed)
-        httpOnly: false,
-        secure: false, // Set to true in production
-      })
-      .redirect(process.env.FRONTENDAPP_URL + '?auth=' + req.user);
+    res.cookie('myCookie', token, {
+      maxAge: 3600000, // 1 hour (adjust as needed)
+      httpOnly: false,
+      secure: false, // Set to true in production
+    });
+    res.status(200).json({
+      message: 'user autenticated in successfully',
+      user: req.user,
+      cookie: token,
+    });
   } catch (err) {
     console.error(err);
     next(err);
