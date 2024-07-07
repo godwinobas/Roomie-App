@@ -24,6 +24,7 @@ const userSchema = new Schema({
     type: String,
     required: false,
     minLength: 6,
+    default: process.env.DEFAULT_PASSWORD,
   },
 });
 
