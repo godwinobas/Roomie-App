@@ -88,7 +88,7 @@ export const aSuccess = (req, res, next) => {
         httpOnly: false,
         secure: true, // Set to true in production
       })
-      .redirect(process.env.FRONTENDAPP_URL + '?auth=' + req.user);
+      .redirect(process.env.FRONTENDAPP_URL + '?auth=' + token);
   } catch (err) {
     console.error(err);
     next(err);
